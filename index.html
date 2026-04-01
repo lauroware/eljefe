@@ -19,69 +19,71 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            font-family: 'Segoe UI', 'Poppins', 'Arial', sans-serif;
-            padding: 10px;
+            font-family: 'Segoe UI', 'Poppins', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            padding: 12px;
             overflow-x: hidden;
             position: relative;
         }
 
         .game-container {
             background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 15px;
+            border-radius: 28px;
+            padding: 16px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
             transition: all 0.3s ease;
-            position: relative;
         }
 
         canvas {
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             display: block;
             margin: 0 auto;
             width: 100%;
             height: auto;
-            cursor: pointer;
+            background: #f0f0f0;
         }
 
+        /* Panel de estadísticas mejorado */
         .info-panel {
-            margin-top: 15px;
+            margin-top: 16px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 15px;
-            border-radius: 15px;
+            padding: 14px;
+            border-radius: 20px;
             color: white;
         }
 
         .stat-card {
             background: rgba(255,255,255,0.2);
             backdrop-filter: blur(10px);
-            padding: 8px;
-            border-radius: 12px;
+            padding: 10px 6px;
+            border-radius: 14px;
             text-align: center;
-            transition: transform 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .stat-card:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
         .stat-label {
             font-size: 11px;
             opacity: 0.9;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
+            font-weight: 500;
         }
 
         .stat-value {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .impunity-card {
@@ -89,26 +91,30 @@
             animation: pulse 1s infinite;
         }
 
+        .full-width {
+            grid-column: span 3;
+        }
+
         button {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 14px;
+            padding: 12px 20px;
+            font-size: 15px;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
             width: 100%;
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.97);
         }
 
-        /* Controles táctiles flotantes y arrastrables */
+        /* Controles táctiles flotantes mejorados */
         .floating-controls {
             position: fixed;
             bottom: 20px;
@@ -116,6 +122,7 @@
             z-index: 1000;
             cursor: grab;
             user-select: none;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
         }
 
         .floating-controls:active {
@@ -124,119 +131,139 @@
 
         .touch-panel {
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
-            border-radius: 80px;
-            padding: 12px;
+            backdrop-filter: blur(20px);
+            border-radius: 100px;
+            padding: 15px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.3);
+            gap: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
             transition: all 0.2s ease;
         }
 
         .arrow-row {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 18px;
         }
 
         .touch-btn {
             background: linear-gradient(135deg, #667eea, #764ba2);
             border: none;
-            border-radius: 60px;
-            width: 65px;
-            height: 65px;
-            font-size: 32px;
+            border-radius: 70px;
+            width: 70px;
+            height: 70px;
+            font-size: 38px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: all 0.1s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            transition: all 0.08s linear;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
             -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .touch-btn:active {
-            transform: scale(0.92);
+            transform: scale(0.88);
             background: linear-gradient(135deg, #764ba2, #667eea);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
 
         .drag-handle {
             position: absolute;
-            top: -15px;
+            top: -22px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255,255,255,0.9);
-            color: #667eea;
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 12px;
+            background: rgba(0,0,0,0.8);
+            color: #ffd700;
+            border-radius: 30px;
+            padding: 5px 14px;
+            font-size: 11px;
             font-weight: bold;
             white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             pointer-events: none;
+            backdrop-filter: blur(8px);
+            letter-spacing: 1px;
         }
 
+        /* Instrucciones mejoradas */
         .instructions {
-            background: rgba(0,0,0,0.85);
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(0,0,0,0.85));
+            padding: 14px;
+            border-radius: 18px;
+            margin-bottom: 16px;
             text-align: center;
             color: white;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.5;
+            border: 1px solid rgba(255,215,0,0.3);
         }
 
         .instructions-title {
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 14px;
             color: #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .instructions-text {
-            font-size: 12px;
-            opacity: 0.9;
+            font-size: 11px;
+            opacity: 0.95;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px 12px;
+            text-align: left;
+        }
+
+        .instructions-text span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .controls-info {
-            grid-column: 1 / -1;
+            grid-column: span 3;
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             background: rgba(0,0,0,0.3);
             padding: 8px;
-            border-radius: 12px;
+            border-radius: 14px;
             margin-top: 5px;
         }
 
-        /* Modal de victoria */
+        /* Modal de victoria mejorado */
         .victory-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.92);
             z-index: 2000;
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.4s ease;
+            backdrop-filter: blur(8px);
         }
 
         .victory-content {
             background: linear-gradient(135deg, #ffd700, #ffb347);
-            padding: 30px;
-            border-radius: 30px;
+            padding: 30px 25px;
+            border-radius: 40px;
             text-align: center;
-            max-width: 90%;
-            animation: bounceIn 0.6s ease;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 85%;
+            animation: bounceIn 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
         .victory-content h2 {
@@ -249,20 +276,22 @@
         .victory-content p {
             font-size: 18px;
             color: #fff;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .victory-content button {
             background: #fff;
             color: #ff8c00;
             width: auto;
-            padding: 12px 30px;
+            padding: 14px 32px;
             font-size: 18px;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 0.95; }
         }
 
         @keyframes fadeIn {
@@ -276,53 +305,102 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
+        /* Responsive para móviles */
+        @media (max-width: 550px) {
+            .game-container {
+                padding: 12px;
+                max-width: 100%;
+            }
+            
             .touch-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 28px;
+                width: 65px;
+                height: 65px;
+                font-size: 34px;
+            }
+            
+            .arrow-row {
+                gap: 15px;
+            }
+            
+            .touch-panel {
+                padding: 12px 16px;
+                gap: 10px;
+            }
+            
+            .stat-value {
+                font-size: 20px;
+            }
+            
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .info-panel {
+                gap: 8px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .touch-btn {
+                width: 58px;
+                height: 58px;
+                font-size: 30px;
+            }
+            
+            .arrow-row {
+                gap: 12px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+            
+            .instructions-text {
+                font-size: 10px;
+                grid-template-columns: 1fr;
+            }
+            
+            .victory-content h2 {
+                font-size: 24px;
+            }
+            
+            .victory-content p {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .touch-btn {
+                width: 52px;
+                height: 52px;
+                font-size: 26px;
             }
             
             .arrow-row {
                 gap: 10px;
             }
             
-            .touch-panel {
-                padding: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .touch-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-            }
-            
-            .info-panel {
-                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-                gap: 8px;
-                padding: 12px;
+            .stat-value {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <!-- Instrucciones siempre visibles -->
+        <!-- Instrucciones mejoradas -->
         <div class="instructions">
-            <div class="instructions-title">🎮 INSTRUCCIONES DEL JUEGO 🎮</div>
+            <div class="instructions-title">
+                🎮 INSTRUCCIONES 🎮
+            </div>
             <div class="instructions-text">
-                🏃‍♀️ <strong>EL JEFE</strong> se quiere robar todo y te necesita:<br>
-                🍎 <strong>3%</strong> = +10pts +3% progreso<br>
-                💵 <strong>U$S</strong> = +50pts<br>
-                🛡️ <strong>IMPUNIDAD</strong> = +100pts + protección por 200 movimientos<br>
-                👮‍♂️ <strong>POLICÍA</strong> ¡NO DEJES QUE TE ATRAPE!<br>
-                🎯 <strong>OBJETIVO:</strong> Llegar al 100% para ganar<br>
-                   <strong></strong>  💡 Llega al 100% para ganar y conseguir asilo en Medio Oriente!<br>
-          
-                🖱️ Arrastra los botones flotantes para moverlos donde quieras
+                <span> <strong>3%</strong> = +10pts +3%</span>
+                <span>💵 <strong>U$S</strong> = +50pts</span>
+                <span>🛡️ <strong>IMPUNIDAD</strong> = +100pts y te da invencibilidad frente a la policia</span>
+                <span>👮‍♂️ <strong>Policía</strong>  ¡No dejes que te atrape!</span>
+                <span>🏆 <strong>OBJETIVO:</strong> Llegar al 100% y conseguir asilo en Medio Oriente!</span>
+                <span>🖱️ <strong>Arrastra</strong> los botones flotantes</span>
             </div>
         </div>
         
@@ -330,7 +408,7 @@
         
         <div class="info-panel">
             <div class="stat-card">
-                <div class="stat-label">💰 PUNTUACIÓN</div>
+                <div class="stat-label">💰 PUNTOS</div>
                 <div class="stat-value" id="score">0</div>
             </div>
             <div class="stat-card">
@@ -338,7 +416,7 @@
                 <div class="stat-value" id="progress">0%</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">🍎 3%</div>
+                <div class="stat-label"> 3%</div>
                 <div class="stat-value" id="foodCount">0</div>
             </div>
             <div class="stat-card">
@@ -346,35 +424,35 @@
                 <div class="stat-value" id="dollarCount">0</div>
             </div>
             <div class="stat-card" id="impunityCard">
-                <div class="stat-label">🛡️ IMPUNIDAD</div>
+                <div class="stat-label">🛡️ ESCUDO</div>
                 <div class="stat-value" id="impunityCount">0</div>
             </div>
-            <button id="restartBtn">🔄 REINICIAR JUEGO</button>
+            <button id="restartBtn">🔄 REINICIAR</button>
             <div class="controls-info">
              </div>
         </div>
     </div>
 
-    <!-- Controles táctiles flotantes y arrastrables -->
+    <!-- Controles táctiles flotantes mejorados -->
     <div class="floating-controls" id="floatingControls">
         <div class="touch-panel">
             <div class="arrow-row">
-                <button class="touch-btn" data-dir="up">⬆️</button>
+                <button class="touch-btn" data-dir="up">▲</button>
             </div>
             <div class="arrow-row">
-                <button class="touch-btn" data-dir="left">⬅️</button>
-                <button class="touch-btn" data-dir="down">⬇️</button>
-                <button class="touch-btn" data-dir="right">➡️</button>
+                <button class="touch-btn" data-dir="left">◀</button>
+                <button class="touch-btn" data-dir="down">▼</button>
+                <button class="touch-btn" data-dir="right">▶</button>
             </div>
         </div>
-        <div class="drag-handle">⋮⋮ ARRASTRAR ⋮⋮</div>
+        <div class="drag-handle">⋮⋮ MANTÉN Y ARRASTRA ⋮⋮</div>
     </div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         
-        // Hacer el canvas responsive
+        // Configuración responsive del canvas
         function resizeCanvas() {
             const container = canvas.parentElement;
             const maxWidth = container.clientWidth - 20;
@@ -420,7 +498,6 @@
         let lastUpdateTime = 0;
         const moveInterval = 180;
         
-        // Efectos visuales
         let hitEffect = 0;
         
         class Particle {
@@ -471,8 +548,8 @@
                     <h2>🎉 ¡FELICITACIONES! 🎉</h2>
                     <p>🏆 ¡Te robaste todo! 🏆</p>
                     <p>🕌 Conseguiste asilo en Medio Oriente! 🕌</p>
-                    <p style="font-size: 14px;">Puntaje final: ${Math.floor(score)}</p>
-                    <button id="closeVictoryBtn">✨ Jugar de nuevo ✨</button>
+                    <p style="font-size: 14px; margin-top: 10px;">Puntaje: ${Math.floor(score)}</p>
+                    <button id="closeVictoryBtn">✨ JUGAR DE NUEVO ✨</button>
                 </div>
             `;
             document.body.appendChild(modal);
@@ -597,7 +674,6 @@
                 impunityCard.style.animation = 'none';
             }
             
-            // Verificar victoria al 100%
             if (progress >= 100 && gameRunning && !gameWin) {
                 showVictory();
             }
@@ -884,21 +960,20 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             ctx.fillStyle = 'white';
-            ctx.font = 'bold 48px "Segoe UI"';
+            ctx.font = 'bold 42px "Segoe UI"';
             ctx.textAlign = 'center';
             ctx.shadowBlur = 15;
-            ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2 - 60);
+            ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2 - 50);
             
-            ctx.font = '24px "Segoe UI"';
+            ctx.font = '20px "Segoe UI"';
             ctx.fillStyle = '#ffd700';
-            ctx.fillText(`Puntaje Final: ${Math.floor(score)}`, canvas.width/2, canvas.height/2 + 20);
+            ctx.fillText(`Puntaje: ${Math.floor(score)}`, canvas.width/2, canvas.height/2 + 20);
             
-            ctx.font = '18px "Segoe UI"';
+            ctx.font = '14px "Segoe UI"';
             ctx.fillStyle = 'white';
-            ctx.fillText(`"3%" recogidos: ${foodCount}  |  "U$S" recogidos: ${dollarCount}`, canvas.width/2, canvas.height/2 + 70);
-            ctx.fillText(`🛡️ Impunidades usadas: ${impunityCount}`, canvas.width/2, canvas.height/2 + 110);
-            ctx.fillText(`Progreso alcanzado: ${progress.toFixed(1)}%`, canvas.width/2, canvas.height/2 + 150);
-            ctx.fillText('Presiona "REINICIAR JUEGO" para jugar de nuevo', canvas.width/2, canvas.height/2 + 210);
+            ctx.fillText(`3%: ${foodCount}  |  U$S: ${dollarCount}`, canvas.width/2, canvas.height/2 + 70);
+            ctx.fillText(`Progreso: ${progress.toFixed(1)}%`, canvas.width/2, canvas.height/2 + 100);
+            ctx.fillText('Presiona "REINICIAR"', canvas.width/2, canvas.height/2 + 150);
             
             ctx.shadowBlur = 0;
         }
