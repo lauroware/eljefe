@@ -3,1150 +3,1068 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>El Jefe - Impunidad Edition | Juego Móvil</title>
+    <title>EL JEFE — Impunidad Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --gold: #f5c518;
+            --gold-dark: #c9a200;
+            --red: #e03030;
+            --red-dark: #a01818;
+            --green: #22c55e;
+            --blue-deep: #0a0f2e;
+            --panel-bg: #0d1117;
+            --card-bg: #161b22;
+            --card-border: #30363d;
+            --text-primary: #e6edf3;
+            --text-muted: #7d8590;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
             min-height: 100vh;
+            background: var(--panel-bg);
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 40px),
+                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.03) 40px);
             display: flex;
             justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            font-family: 'Segoe UI', 'Poppins', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
-            padding: 12px;
+            align-items: flex-start;
+            font-family: 'Barlow Condensed', sans-serif;
             overflow-x: hidden;
-            position: relative;
+            padding: 16px 12px 140px;
         }
 
-        .game-container {
-            background: rgba(255,255,255,0.95);
-            border-radius: 28px;
-            padding: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
+        .game-wrapper {
             width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            transition: all 0.3s ease;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* HEADER */
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4px;
+        }
+
+        .game-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 38px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(245,197,24,0.5), 3px 3px 0 var(--gold-dark);
+            line-height: 1;
+        }
+
+        .game-subtitle {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--red);
+            text-transform: uppercase;
+        }
+
+        .badge {
+            background: var(--red);
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 13px;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            line-height: 1.4;
+        }
+
+        /* CANVAS */
+        .canvas-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(245,197,24,0.3);
+            box-shadow: 0 0 0 1px rgba(245,197,24,0.1), 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
         canvas {
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             display: block;
-            margin: 0 auto;
             width: 100%;
             height: auto;
-            background: #f0f0f0;
+            background: #080d1a;
         }
 
-        /* Panel de estadísticas mejorado */
-        .info-panel {
-            margin-top: 16px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 14px;
-            border-radius: 20px;
-            color: white;
-        }
-
-        .stat-card {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 10px 6px;
-            border-radius: 14px;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .stat-card:active {
-            transform: scale(0.96);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            opacity: 0.9;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .stat-value {
-            font-size: 22px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .impunity-card {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            animation: pulse 1s infinite;
-        }
-
-        .full-width {
-            grid-column: span 3;
-        }
-
-        button {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            letter-spacing: 0.5px;
-            width: 100%;
-        }
-
-        button:active {
-            transform: scale(0.97);
-        }
-
-        /* Controles táctiles flotantes mejorados */
-        .floating-controls {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            cursor: grab;
-            user-select: none;
-            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
-        }
-
-        .floating-controls:active {
-            cursor: grabbing;
-        }
-
-        .touch-panel {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            border-radius: 100px;
-            padding: 15px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.2s ease;
-        }
-
-        .arrow-row {
-            display: flex;
-            justify-content: center;
-            gap: 18px;
-        }
-
-        .touch-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 70px;
-            width: 70px;
-            height: 70px;
-            font-size: 38px;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            transition: all 0.08s linear;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-
-        .touch-btn:active {
-            transform: scale(0.88);
-            background: linear-gradient(135deg, #764ba2, #667eea);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-        }
-
-        .drag-handle {
+        .canvas-corner {
             position: absolute;
-            top: -22px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: #ffd700;
-            border-radius: 30px;
-            padding: 5px 14px;
-            font-size: 11px;
-            font-weight: bold;
-            white-space: nowrap;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            pointer-events: none;
-            backdrop-filter: blur(8px);
-            letter-spacing: 1px;
+            width: 16px;
+            height: 16px;
+            border-color: var(--gold);
+            border-style: solid;
+            opacity: 0.6;
         }
+        .canvas-corner.tl { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+        .canvas-corner.tr { top: 6px; right: 6px; border-width: 2px 2px 0 0; }
+        .canvas-corner.bl { bottom: 6px; left: 6px; border-width: 0 0 2px 2px; }
+        .canvas-corner.br { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
 
-        /* Instrucciones mejoradas */
-        .instructions {
-            background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(0,0,0,0.85));
-            padding: 14px;
-            border-radius: 18px;
-            margin-bottom: 16px;
-            text-align: center;
-            color: white;
-            font-size: 12px;
-            line-height: 1.5;
-            border: 1px solid rgba(255,215,0,0.3);
-        }
-
-        .instructions-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #ffd700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* STATS PANEL */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
         }
 
-        .instructions-text {
-            font-size: 11px;
-            opacity: 0.95;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px 12px;
-            text-align: left;
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px 8px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
         }
 
-        .instructions-text span {
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--gold);
+            opacity: 0.4;
+        }
+
+        .stat-card.active-shield::before { background: var(--red); opacity: 1; }
+        .stat-card.active-shield { border-color: var(--red); animation: shield-pulse 0.8s infinite; }
+
+        @keyframes shield-pulse {
+            0%, 100% { box-shadow: none; }
+            50% { box-shadow: 0 0 16px rgba(224,48,48,0.5); }
+        }
+
+        .stat-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        /* PROGRESS BAR */
+        .progress-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .progress-pct {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: var(--gold);
+        }
+
+        .progress-track {
+            height: 10px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 99px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+            border-radius: 99px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 8px rgba(245,197,24,0.6);
+        }
+
+        /* BOTTOM CONTROLS */
+        .controls-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* LEGEND */
+        .legend {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .legend-item {
             display: flex;
             align-items: center;
             gap: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
         }
 
-        .controls-info {
-            grid-column: span 3;
-            text-align: center;
-            font-size: 10px;
-            background: rgba(0,0,0,0.3);
-            padding: 8px;
-            border-radius: 14px;
-            margin-top: 5px;
+        .legend-dot {
+            width: 10px; height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .ld-green { background: #22c55e; border-radius: 50%; }
+        .ld-gold { background: var(--gold); }
+        .ld-red { background: var(--red); }
+        .ld-blue { background: #3b82f6; border-radius: 50%; }
+
+        /* RESTART BUTTON */
+        .restart-btn {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
 
-        /* Modal de victoria mejorado */
-        .victory-modal {
+        .restart-btn:hover, .restart-btn:active {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(245,197,24,0.06);
+        }
+
+        /* FLOATING D-PAD */
+        .floating-controls {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.92);
-            z-index: 2000;
+            bottom: 24px;
+            right: 20px;
+            z-index: 1000;
+            cursor: grab;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.7));
+        }
+
+        .dpad {
+            display: grid;
+            grid-template-areas: ". u ." "l c r" ". d .";
+            gap: 4px;
+        }
+
+        .dpad-btn {
+            width: 56px;
+            height: 56px;
+            background: #1a2035;
+            border: 1px solid rgba(245,197,24,0.25);
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
-            animation: fadeIn 0.4s ease;
-            backdrop-filter: blur(8px);
+            justify-content: center;
+            color: var(--text-primary);
+            transition: all 0.08s;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .victory-content {
-            background: linear-gradient(135deg, #ffd700, #ffb347);
-            padding: 30px 25px;
-            border-radius: 40px;
+        .dpad-btn:active {
+            background: rgba(245,197,24,0.15);
+            border-color: var(--gold);
+            transform: scale(0.9);
+        }
+
+        .dpad-btn[data-dir="up"] { grid-area: u; }
+        .dpad-btn[data-dir="left"] { grid-area: l; }
+        .dpad-btn[data-dir="right"] { grid-area: r; }
+        .dpad-btn[data-dir="down"] { grid-area: d; }
+        .dpad-center {
+            grid-area: c;
+            width: 56px; height: 56px;
+            background: rgba(245,197,24,0.08);
+            border: 1px solid rgba(245,197,24,0.12);
+            border-radius: 10px;
+        }
+
+        /* VICTORY MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 36px 32px;
             text-align: center;
-            max-width: 85%;
-            animation: bounceIn 0.5s ease;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            max-width: 340px;
+            width: 90%;
+            box-shadow: 0 0 60px rgba(245,197,24,0.2);
+            animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
         }
 
-        .victory-content h2 {
-            font-size: 28px;
-            color: #fff;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .modal-box .modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 42px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(245,197,24,0.6);
+            line-height: 1;
+            margin-bottom: 6px;
         }
 
-        .victory-content p {
-            font-size: 18px;
-            color: #fff;
-            margin-bottom: 12px;
+        .modal-box .modal-subtitle {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 20px;
         }
 
-        .victory-content button {
-            background: #fff;
-            color: #ff8c00;
-            width: auto;
-            padding: 14px 32px;
-            font-size: 18px;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .modal-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .modal-stat:last-of-type { border-bottom: none; }
+        .modal-stat span:last-child {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            color: var(--gold);
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.03); opacity: 0.95; }
+        .modal-btn {
+            margin-top: 20px;
+            width: 100%;
+            background: var(--gold);
+            color: #0a0f2e;
+            border: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 2px;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .modal-btn:hover { background: #ffe566; }
 
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Responsive para móviles */
-        @media (max-width: 550px) {
-            .game-container {
-                padding: 12px;
-                max-width: 100%;
-            }
-            
-            .touch-btn {
-                width: 65px;
-                height: 65px;
-                font-size: 34px;
-            }
-            
-            .arrow-row {
-                gap: 15px;
-            }
-            
-            .touch-panel {
-                padding: 12px 16px;
-                gap: 10px;
-            }
-            
-            .stat-value {
-                font-size: 20px;
-            }
-            
-            .stat-label {
-                font-size: 10px;
-            }
-            
-            .info-panel {
-                gap: 8px;
-                padding: 12px;
-            }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px) scale(0.9); opacity: 0; } to { transform: none; opacity: 1; } }
 
         @media (max-width: 480px) {
-            .touch-btn {
-                width: 58px;
-                height: 58px;
-                font-size: 30px;
-            }
-            
-            .arrow-row {
-                gap: 12px;
-            }
-            
-            .stat-value {
-                font-size: 18px;
-            }
-            
-            .instructions-text {
-                font-size: 10px;
-                grid-template-columns: 1fr;
-            }
-            
-            .victory-content h2 {
-                font-size: 24px;
-            }
-            
-            .victory-content p {
-                font-size: 16px;
-            }
+            .game-title { font-size: 30px; }
+            .dpad-btn { width: 50px; height: 50px; font-size: 18px; }
+            .dpad-center { width: 50px; height: 50px; }
+            .stats-panel { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+            .stat-value { font-size: 22px; }
         }
 
-        @media (max-width: 400px) {
-            .touch-btn {
-                width: 52px;
-                height: 52px;
-                font-size: 26px;
-            }
-            
-            .arrow-row {
-                gap: 10px;
-            }
-            
-            .stat-value {
-                font-size: 16px;
-            }
+        @media (max-width: 380px) {
+            .dpad-btn { width: 46px; height: 46px; font-size: 16px; }
+            .dpad-center { width: 46px; height: 46px; }
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Instrucciones mejoradas -->
-        <div class="instructions">
-            <div class="instructions-title">
-                🎮 INSTRUCCIONES 🎮
-            </div>
-            <div class="instructions-text">
-                EL JEFE SE QUIERE ROBAR TODO, Y NECESITA DE TU AYUDA PARA LOGRARLO. ¡CUIDADO CON LA POLICÍA!
-                <span> <strong>3%</strong> = +10pts +3%</span>
-                <span>💵 <strong>U$S</strong> = +50pts</span>
-                <span>🛡️ <strong>IMPUNIDAD</strong> = +100pts y te da invencibilidad frente a la policia</span>
-                <span>👮‍♂️ <strong>Policía</strong>  ¡No dejes que te atrape!</span>
-                <span>🏆 <strong>OBJETIVO:</strong> Llegar al 100% y conseguir asilo en Medio Oriente!</span>
-                <span>🖱️ <strong>Arrastra</strong> los botones flotantes</span>
-            </div>
+<div class="game-wrapper">
+
+    <div class="game-header">
+        <div>
+            <div class="game-title">EL JEFE</div>
+            <div class="game-subtitle">Impunidad Edition</div>
         </div>
-        
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        
-        <div class="info-panel">
-            <div class="stat-card">
-                <div class="stat-label">💰 PUNTOS</div>
-                <div class="stat-value" id="score">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">📊 PROGRESO</div>
-                <div class="stat-value" id="progress">0%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label"> 3%</div>
-                <div class="stat-value" id="foodCount">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">💵 U$S</div>
-                <div class="stat-value" id="dollarCount">0</div>
-            </div>
-            <div class="stat-card" id="impunityCard">
-                <div class="stat-label">🛡️ ESCUDO</div>
-                <div class="stat-value" id="impunityCount">0</div>
-            </div>
-            <button id="restartBtn">🔄 REINICIAR</button>
-            <div class="controls-info">
-             </div>
+        <div class="badge">ARCADE</div>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="gameCanvas" width="800" height="560"></canvas>
+        <div class="canvas-corner tl"></div>
+        <div class="canvas-corner tr"></div>
+        <div class="canvas-corner bl"></div>
+        <div class="canvas-corner br"></div>
+    </div>
+
+    <div class="stats-panel">
+        <div class="stat-card">
+            <div class="stat-label">Puntos</div>
+            <div class="stat-value" id="score">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">3%</div>
+            <div class="stat-value" id="foodCount">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">U$S</div>
+            <div class="stat-value" id="dollarCount">0</div>
+        </div>
+        <div class="stat-card" id="impunityCard">
+            <div class="stat-label">Escudo</div>
+            <div class="stat-value" id="impunityTimer">—</div>
         </div>
     </div>
 
-    <!-- Controles táctiles flotantes mejorados -->
-    <div class="floating-controls" id="floatingControls">
-        <div class="touch-panel">
-            <div class="arrow-row">
-                <button class="touch-btn" data-dir="up">▲</button>
-            </div>
-            <div class="arrow-row">
-                <button class="touch-btn" data-dir="left">◀</button>
-                <button class="touch-btn" data-dir="down">▼</button>
-                <button class="touch-btn" data-dir="right">▶</button>
-            </div>
+    <div class="progress-section">
+        <div class="progress-header">
+            <span class="progress-label">Objetivo de Robo</span>
+            <span class="progress-pct" id="progress">0%</span>
         </div>
-        <div class="drag-handle">⋮⋮ MANTÉN Y ARRASTRA ⋮⋮</div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressBar" style="width:0%"></div>
+        </div>
     </div>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Configuración responsive del canvas
-        function resizeCanvas() {
-            const container = canvas.parentElement;
-            const maxWidth = container.clientWidth - 20;
-            const aspectRatio = canvas.height / canvas.width;
-            
-            if (maxWidth < 800) {
-                canvas.style.width = `${maxWidth}px`;
-                canvas.style.height = `${maxWidth * aspectRatio}px`;
-            } else {
-                canvas.style.width = '800px';
-                canvas.style.height = '600px';
-            }
-        }
-        
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        
-        // Configuración del juego
-        const gridSize = 40;
-        const tileCountX = canvas.width / gridSize;
-        const tileCountY = canvas.height / gridSize;
-        
-        let player = { x: 10, y: 7 };
-        let items = [];
-        let police = null;
-        let direction = { x: 0, y: 0 };
-        let score = 0;
-        let foodCount = 0;
-        let dollarCount = 0;
-        let impunityCount = 0;
-        let progress = 0;
-        let gameRunning = true;
-        let gameWin = false;
-        let moveCounter = 0;
-        let policeSpawnCounter = 0;
-        let impunityRemaining = 0;
-        const POLICE_SPAWN_INTERVAL = 15;
-        const IMPUNITY_DURATION = 200;
-        
-        // Animaciones
-        let particles = [];
-        let screenShake = 0;
-        let lastUpdateTime = 0;
-        const moveInterval = 180;
-        
-        let hitEffect = 0;
-        
-        class Particle {
-            constructor(x, y, color, type, text = '') {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 4;
-                this.vy = (Math.random() - 0.5) * 4 - 2;
-                this.life = 1;
-                this.color = color;
-                this.type = type;
-                this.size = Math.random() * 3 + 2;
-                this.text = text;
-            }
-            
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vy += 0.2;
-                this.life -= 0.02;
-                return this.life > 0;
-            }
-            
-            draw() {
-                ctx.globalAlpha = this.life;
-                if (this.type === 'text') {
-                    ctx.font = `bold ${this.size * 4}px "Segoe UI"`;
-                    ctx.fillStyle = this.color;
-                    ctx.shadowBlur = 10;
-                    ctx.fillText(this.text || (this.color === '#ffd700' ? 'U$S' : '3%'), this.x, this.y);
-                } else {
-                    ctx.fillStyle = this.color;
-                    ctx.fillRect(this.x, this.y, this.size, this.size);
-                }
-                ctx.globalAlpha = 1;
-                ctx.shadowBlur = 0;
-            }
-        }
-        
-        function showVictory() {
-            gameRunning = false;
-            gameWin = true;
-            
-            const modal = document.createElement('div');
-            modal.className = 'victory-modal';
-            modal.innerHTML = `
-                <div class="victory-content">
-                    <h2>🎉 ¡FELICITACIONES! 🎉</h2>
-                    <p>🏆 ¡Te robaste todo! 🏆</p>
-                    <p>🕌 Conseguiste asilo en Medio Oriente! 🕌</p>
-                    <p style="font-size: 14px; margin-top: 10px;">Puntaje: ${Math.floor(score)}</p>
-                    <button id="closeVictoryBtn">✨ JUGAR DE NUEVO ✨</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            document.getElementById('closeVictoryBtn').addEventListener('click', () => {
-                modal.remove();
-                initGame();
-                gameRunning = true;
-                gameWin = false;
-                lastUpdateTime = 0;
-                direction = { x: 0, y: 0 };
-                particles = [];
-            });
-        }
-        
-        function initGame() {
-            player = { x: Math.floor(tileCountX / 2), y: Math.floor(tileCountY / 2) };
-            direction = { x: 0, y: 0 };
-            score = 0;
-            foodCount = 0;
-            dollarCount = 0;
-            impunityCount = 0;
-            progress = 0;
-            moveCounter = 0;
-            policeSpawnCounter = 0;
-            impunityRemaining = 0;
-            police = null;
-            gameRunning = true;
-            gameWin = false;
-            particles = [];
-            screenShake = 0;
-            
-            items = [];
-            for(let i = 0; i < 8; i++) {
-                generateItem();
-            }
-            
-            updateDisplay();
-        }
-        
-        function generateItem() {
-            const rand = Math.random();
-            let type;
-            if (rand < 0.2) {
-                type = 'impunity';
-            } else if (rand < 0.4) {
-                type = 'dollar';
-            } else {
-                type = 'percent';
-            }
-            
-            let newItem;
-            let attempts = 0;
-            do {
-                newItem = {
-                    x: Math.floor(Math.random() * tileCountX),
-                    y: Math.floor(Math.random() * tileCountY),
-                    type: type
-                };
-                attempts++;
-                if (attempts > 100) break;
-            } while (items.some(item => item.x === newItem.x && item.y === newItem.y) || 
-                     (police && police.x === newItem.x && police.y === newItem.y) ||
-                     (player.x === newItem.x && player.y === newItem.y));
-            
-            items.push(newItem);
-        }
-        
-        function spawnPolice() {
-            police = null;
-            let newPolice;
-            let attempts = 0;
-            do {
-                newPolice = {
-                    x: Math.floor(Math.random() * tileCountX),
-                    y: Math.floor(Math.random() * tileCountY)
-                };
-                attempts++;
-                if (attempts > 50) break;
-            } while (Math.abs(newPolice.x - player.x) < 4 && Math.abs(newPolice.y - player.y) < 4);
-            
-            police = newPolice;
-            policeSpawnCounter = 0;
-            
-            for(let i = 0; i < 15; i++) {
-                particles.push(new Particle(police.x * gridSize + gridSize/2, police.y * gridSize + gridSize/2, '#ff0000', 'particle'));
-            }
-        }
-        
-        function movePolice() {
-            if (!police) return;
-            
-            let dx = 0, dy = 0;
-            if (Math.abs(police.x - player.x) > Math.abs(police.y - player.y)) {
-                dx = police.x > player.x ? -1 : 1;
-            } else {
-                dy = police.y > player.y ? -1 : 1;
-            }
-            
-            const newX = police.x + dx;
-            const newY = police.y + dy;
-            
-            if (newX >= 0 && newX < tileCountX && newY >= 0 && newY < tileCountY) {
-                police.x = newX;
-                police.y = newY;
-            }
-        }
-        
-        function updateDisplay() {
-            document.getElementById('score').textContent = Math.floor(score);
-            document.getElementById('progress').textContent = `${progress.toFixed(1)}%`;
-            document.getElementById('foodCount').textContent = foodCount;
-            document.getElementById('dollarCount').textContent = dollarCount;
-            document.getElementById('impunityCount').textContent = impunityRemaining;
-            
-            const impunityCard = document.getElementById('impunityCard');
-            if (impunityRemaining > 0) {
-                impunityCard.style.background = 'linear-gradient(135deg, #ff6b6b, #ff8e53)';
-                impunityCard.style.animation = 'pulse 1s infinite';
-            } else {
-                impunityCard.style.background = 'rgba(255,255,255,0.2)';
-                impunityCard.style.animation = 'none';
-            }
-            
-            if (progress >= 100 && gameRunning && !gameWin) {
-                showVictory();
-            }
-        }
-        
-        function movePlayer() {
-            if (!gameRunning) return;
-            
-            const newX = player.x + direction.x;
-            const newY = player.y + direction.y;
-            
-            if (newX < 0 || newX >= tileCountX || newY < 0 || newY >= tileCountY) {
-                gameOver("¡Te saliste del mapa!");
-                return;
-            }
-            
-            player.x = newX;
-            player.y = newY;
-            
-            moveCounter++;
-            if (police) policeSpawnCounter++;
-            
-            if (impunityRemaining > 0) {
-                impunityRemaining--;
-                updateDisplay();
-            }
-            
-            if (police && player.x === police.x && player.y === police.y && impunityRemaining === 0) {
-                gameOver("¡El policía te atrapó!");
-                return;
-            }
-            
-            const itemIndex = items.findIndex(item => item.x === player.x && item.y === player.y);
-            if (itemIndex !== -1) {
-                const item = items[itemIndex];
-                screenShake = 5;
-                
-                if (item.type === 'percent') {
-                    foodCount++;
-                    progress = foodCount * 3;
-                    score += 10;
-                    for(let i = 0; i < 20; i++) {
-                        particles.push(new Particle(player.x * gridSize + gridSize/2, player.y * gridSize + gridSize/2, '#4caf50', 'text', '3%'));
-                    }
-                } else if (item.type === 'dollar') {
-                    dollarCount++;
-                    score += 50;
-                    for(let i = 0; i < 30; i++) {
-                        particles.push(new Particle(player.x * gridSize + gridSize/2, player.y * gridSize + gridSize/2, '#ffd700', 'text', 'U$S'));
-                    }
-                } else if (item.type === 'impunity') {
-                    impunityCount++;
-                    impunityRemaining = IMPUNITY_DURATION;
-                    score += 100;
-                    for(let i = 0; i < 40; i++) {
-                        particles.push(new Particle(player.x * gridSize + gridSize/2, player.y * gridSize + gridSize/2, '#ff6b6b', 'text', '🛡️'));
-                    }
-                    screenShake = 10;
-                }
-                updateDisplay();
-                items.splice(itemIndex, 1);
-                generateItem();
-            }
-            
-            if (moveCounter >= POLICE_SPAWN_INTERVAL && !police) {
-                spawnPolice();
-                moveCounter = 0;
-            }
-            
-            if (police) {
-                if (impunityRemaining > 0) {
-                    if (Math.random() < 0.5) {
-                        movePolice();
-                    }
-                } else {
-                    movePolice();
-                }
-                
-                if (player.x === police.x && police.y === player.y && impunityRemaining === 0) {
-                    gameOver("¡El policía te atrapó!");
-                    return;
-                }
-                
-                if (policeSpawnCounter >= 22) {
-                    police = null;
-                }
-            }
-            
-            particles = particles.filter(p => p.update());
-        }
-        
-        function gameOver(reason) {
-            gameRunning = false;
-            hitEffect = 30;
-        }
-        
-        function drawBackground() {
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, '#e8f0f5');
-            gradient.addColorStop(1, '#d4e0e8');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.strokeStyle = 'rgba(100,100,100,0.1)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= tileCountX; i++) {
-                ctx.beginPath();
-                ctx.moveTo(i * gridSize, 0);
-                ctx.lineTo(i * gridSize, canvas.height);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(0, i * gridSize);
-                ctx.lineTo(canvas.width, i * gridSize);
-                ctx.stroke();
-            }
-        }
-        
-        function drawItem(item) {
-            const x = item.x * gridSize;
-            const y = item.y * gridSize;
-            const size = gridSize - 4;
-            
-            ctx.save();
+    <div class="controls-row">
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot ld-green"></div>3% = +10pts</div>
+            <div class="legend-item"><div class="legend-dot ld-gold"></div>U$S = +50pts</div>
+            <div class="legend-item"><div class="legend-dot ld-red"></div>Escudo = invenc.</div>
+            <div class="legend-item"><div class="legend-dot ld-blue"></div>Sos vos</div>
+            <div class="legend-item" style="grid-column:span 2; color: #e03030">⚠ Evitá La Ley</div>
+        </div>
+        <button class="restart-btn" id="restartBtn">↺ Restart</button>
+    </div>
+
+</div>
+
+<!-- FLOATING D-PAD -->
+<div class="floating-controls" id="floatingControls">
+    <div class="dpad">
+        <button class="dpad-btn" data-dir="up">▲</button>
+        <button class="dpad-btn" data-dir="left">◀</button>
+        <div class="dpad-center"></div>
+        <button class="dpad-btn" data-dir="right">▶</button>
+        <button class="dpad-btn" data-dir="down">▼</button>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+    const mw = canvas.parentElement.clientWidth - 4;
+    canvas.style.width = mw + 'px';
+    canvas.style.height = (mw * 560 / 800) + 'px';
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+const GS = 40;
+const CX = canvas.width / GS;   // 20
+const CY = canvas.height / GS;  // 14
+
+// ── game state ──────────────────────────────────────
+let player, items, police, dir, score, foodCount, dollarCount,
+    impunityRemaining, progress, gameRunning, gameWin,
+    moveCounter, policeCounter, particles, screenShake, hitEffect,
+    lastTime;
+
+const POLICE_SPAWN = 15;
+const IMPUNITY_DUR = 220;
+const MOVE_INTERVAL = 175;
+
+// ── Particle ─────────────────────────────────────────
+class Particle {
+    constructor(x, y, color, label) {
+        this.x = x; this.y = y;
+        this.vx = (Math.random() - 0.5) * 5;
+        this.vy = Math.random() * -4 - 2;
+        this.life = 1;
+        this.color = color;
+        this.label = label;
+        this.sz = Math.random() * 2 + 1;
+    }
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.18;
+        this.life -= 0.025;
+        return this.life > 0;
+    }
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.life;
+        if (this.label) {
+            ctx.font = `bold ${Math.floor(this.sz * 7)}px 'Bebas Neue', sans-serif`;
+            ctx.fillStyle = this.color;
+            ctx.shadowColor = this.color;
             ctx.shadowBlur = 8;
-            ctx.shadowColor = 'rgba(0,0,0,0.2)';
-            
-            if (item.type === 'percent') {
-                const gradient = ctx.createRadialGradient(x + size/2, y + size/2, 0, x + size/2, y + size/2, size/2);
-                gradient.addColorStop(0, '#6fbf6f');
-                gradient.addColorStop(1, '#4caf50');
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.arc(x + size/2, y + size/2, size/2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = 'white';
-                ctx.font = `bold ${Math.floor(size * 0.5)}px "Segoe UI"`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('3%', x + size/2, y + size/2);
-            } else if (item.type === 'dollar') {
-                const gradient = ctx.createLinearGradient(x, y, x + size, y + size);
-                gradient.addColorStop(0, '#ffd700');
-                gradient.addColorStop(1, '#ffb347');
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.ellipse(x + size/2, y + size/2, size/2, size/2.5, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = '#fff3e0';
-                ctx.font = `bold ${Math.floor(size * 0.45)}px "Segoe UI"`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('U$S', x + size/2, y + size/2);
-            } else {
-                const gradient = ctx.createLinearGradient(x, y, x + size, y + size);
-                gradient.addColorStop(0, '#ff6b6b');
-                gradient.addColorStop(1, '#ff8e53');
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.rect(x, y, size, size);
-                ctx.fill();
-                ctx.fillStyle = 'white';
-                ctx.font = `${Math.floor(size * 0.6)}px "Segoe UI"`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('🛡️', x + size/2, y + size/2);
-                ctx.font = `bold ${Math.floor(size * 0.25)}px "Segoe UI"`;
-                ctx.fillStyle = '#fff3e0';
-                ctx.fillText('IMP', x + size/2, y + size - 8);
-            }
-            ctx.restore();
+            ctx.fillText(this.label, this.x, this.y);
+        } else {
+            ctx.fillStyle = this.color;
+            ctx.fillRect(this.x, this.y, this.sz * 2, this.sz * 2);
         }
-        
-        function drawPolice() {
-            if (!police) return;
-            
-            const x = police.x * gridSize;
-            const y = police.y * gridSize;
-            const size = gridSize - 4;
-            
-            ctx.save();
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(0,0,0,0.3)';
-            
-            const gradient = ctx.createLinearGradient(x, y, x + size, y + size);
-            gradient.addColorStop(0, '#2c3e66');
-            gradient.addColorStop(1, '#1e2a4a');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(x, y, size, size);
-            
-            ctx.fillStyle = '#0a0f2e';
-            ctx.fillRect(x + 2, y + 2, size - 4, 8);
-            ctx.fillStyle = '#ffd700';
-            ctx.fillRect(x + size/2 - 3, y + 2, 6, 12);
-            
-            ctx.fillStyle = '#ffdbaf';
-            ctx.beginPath();
-            ctx.arc(x + size/2, y + size/2.2, size/3.5, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = '#2c2c2c';
-            ctx.beginPath();
-            ctx.arc(x + size/2.8, y + size/2, 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + size/1.5, y + size/2, 3, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = '#ffd700';
-            ctx.fillRect(x + size/2 - 4, y + size/1.3, 8, 5);
-            
-            ctx.restore();
+        ctx.restore();
+    }
+}
+
+function burst(x, y, color, label, n) {
+    for (let i = 0; i < n; i++) particles.push(new Particle(x, y, color, label));
+}
+
+// ── Init ─────────────────────────────────────────────
+function initGame() {
+    player = { x: Math.floor(CX / 2), y: Math.floor(CY / 2) };
+    dir = { x: 0, y: 0 };
+    score = 0; foodCount = 0; dollarCount = 0;
+    impunityRemaining = 0; progress = 0;
+    moveCounter = 0; policeCounter = 0;
+    police = null; gameRunning = true; gameWin = false;
+    particles = []; screenShake = 0; hitEffect = 0;
+    lastTime = 0;
+    items = [];
+    for (let i = 0; i < 10; i++) generateItem();
+    updateHUD();
+}
+
+function generateItem() {
+    const r = Math.random();
+    const type = r < 0.18 ? 'impunity' : r < 0.40 ? 'dollar' : 'percent';
+    let it, tries = 0;
+    do {
+        it = { x: Math.floor(Math.random() * CX), y: Math.floor(Math.random() * CY), type };
+        tries++;
+    } while (tries < 100 && (
+        items.some(i => i.x === it.x && i.y === it.y) ||
+        (police && police.x === it.x && police.y === it.y) ||
+        (player.x === it.x && player.y === it.y)
+    ));
+    items.push(it);
+}
+
+function spawnPolice() {
+    let p, t = 0;
+    do {
+        p = { x: Math.floor(Math.random() * CX), y: Math.floor(Math.random() * CY) };
+        t++;
+    } while (t < 50 && Math.abs(p.x - player.x) < 5 && Math.abs(p.y - player.y) < 5);
+    police = p;
+    policeCounter = 0;
+    burst(p.x * GS + GS / 2, p.y * GS + GS / 2, '#e03030', null, 20);
+}
+
+function movePolice() {
+    if (!police) return;
+    const slow = impunityRemaining > 0 && Math.random() < 0.45;
+    if (slow) return;
+    const dx = police.x > player.x ? -1 : police.x < player.x ? 1 : 0;
+    const dy = police.y > player.y ? -1 : police.y < player.y ? 1 : 0;
+    if (Math.abs(police.x - player.x) >= Math.abs(police.y - player.y)) {
+        police.x += dx;
+    } else {
+        police.y += dy;
+    }
+}
+
+// ── Move & collision ──────────────────────────────────
+function movePlayer() {
+    if (!gameRunning) return;
+    // wrap-around (Pac-Man style)
+    let nx = (player.x + dir.x + CX) % CX;
+    let ny = (player.y + dir.y + CY) % CY;
+    player.x = nx;
+    player.y = ny;
+
+    moveCounter++;
+    if (police) policeCounter++;
+    if (impunityRemaining > 0) impunityRemaining--;
+
+    // Police collision check (before moving police)
+    if (police && player.x === police.x && player.y === police.y && impunityRemaining === 0) {
+        triggerGameOver(); return;
+    }
+
+    // Item pickup
+    const idx = items.findIndex(i => i.x === player.x && i.y === player.y);
+    if (idx !== -1) {
+        const it = items[idx];
+        const px = player.x * GS + GS / 2, py = player.y * GS + GS / 2;
+        screenShake = 4;
+        if (it.type === 'percent') {
+            foodCount++;
+            progress = foodCount * 3;
+            score += 10;
+            burst(px, py, '#22c55e', '3%', 18);
+        } else if (it.type === 'dollar') {
+            dollarCount++;
+            score += 50;
+            burst(px, py, '#f5c518', 'U$S', 25);
+        } else {
+            impunityRemaining = IMPUNITY_DUR;
+            score += 100;
+            screenShake = 10;
+            burst(px, py, '#e03030', '¡ESCUDO!', 30);
         }
-        
-        function drawPlayer() {
-            const x = player.x * gridSize;
-            const y = player.y * gridSize;
-            const size = gridSize - 4;
-            
-            ctx.save();
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(0,0,0,0.3)';
-            
-            if (impunityRemaining > 0) {
-                ctx.beginPath();
-                ctx.arc(x + size/2, y + size/2, size/1.5, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 107, 107, 0.3)';
-                ctx.fill();
-                ctx.strokeStyle = '#ff6b6b';
-                ctx.lineWidth = 3;
-                ctx.stroke();
-            }
-            
-            const hairGradient = ctx.createLinearGradient(x, y, x + size, y + size);
-            hairGradient.addColorStop(0, '#f8d568');
-            hairGradient.addColorStop(1, '#e6b422');
-            ctx.fillStyle = hairGradient;
-            ctx.beginPath();
-            ctx.ellipse(x + size/2, y + size/3.2, size/2.3, size/2.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            const faceGradient = ctx.createRadialGradient(x + size/2.5, y + size/2.2, 5, x + size/2, y + size/2, size/2);
-            faceGradient.addColorStop(0, '#ffe4c4');
-            faceGradient.addColorStop(1, '#ffd7b5');
-            ctx.fillStyle = faceGradient;
-            ctx.beginPath();
-            ctx.ellipse(x + size/2, y + size/2.3, size/2.8, size/2.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = '#2c2c2c';
-            ctx.beginPath();
-            ctx.arc(x + size/2.8, y + size/2, size/8, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + size/1.5, y + size/2, size/8, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.arc(x + size/2.6, y + size/1.95, 1.5, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + size/1.45, y + size/1.95, 1.5, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.beginPath();
-            ctx.arc(x + size/2, y + size/1.65, size/4, 0, Math.PI);
-            ctx.strokeStyle = '#c96f3e';
-            ctx.lineWidth = 2.5;
-            ctx.stroke();
-            
-            ctx.fillStyle = 'rgba(255, 120, 120, 0.3)';
-            ctx.beginPath();
-            ctx.ellipse(x + size/2.2, y + size/1.5, 4, 3, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(x + size/1.3, y + size/1.5, 4, 3, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.restore();
+        items.splice(idx, 1);
+        generateItem();
+        updateHUD();
+    }
+
+    // Spawn police
+    if (!police && moveCounter >= POLICE_SPAWN) {
+        spawnPolice();
+        moveCounter = 0;
+    }
+
+    // Move police
+    if (police) {
+        movePolice();
+        if (player.x === police.x && player.y === police.y && impunityRemaining === 0) {
+            triggerGameOver(); return;
         }
-        
-        function drawGameOver() {
-            ctx.fillStyle = 'rgba(0,0,0,0.85)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 42px "Segoe UI"';
-            ctx.textAlign = 'center';
-            ctx.shadowBlur = 15;
-            ctx.fillText('GAME OVER', canvas.width/2, canvas.height/2 - 50);
-            
-            ctx.font = '20px "Segoe UI"';
-            ctx.fillStyle = '#ffd700';
-            ctx.fillText(`Puntaje: ${Math.floor(score)}`, canvas.width/2, canvas.height/2 + 20);
-            
-            ctx.font = '14px "Segoe UI"';
-            ctx.fillStyle = 'white';
-            ctx.fillText(`3%: ${foodCount}  |  U$S: ${dollarCount}`, canvas.width/2, canvas.height/2 + 70);
-            ctx.fillText(`Progreso: ${progress.toFixed(1)}%`, canvas.width/2, canvas.height/2 + 100);
-            ctx.fillText('Presiona "REINICIAR"', canvas.width/2, canvas.height/2 + 150);
-            
-            ctx.shadowBlur = 0;
-        }
-        
-        function draw() {
-            if (screenShake > 0) {
-                ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake);
-                screenShake--;
-            }
-            
-            drawBackground();
-            items.forEach(item => drawItem(item));
-            drawPolice();
-            drawPlayer();
-            particles.forEach(p => p.draw());
-            
-            if (hitEffect > 0) {
-                ctx.fillStyle = `rgba(255, 0, 0, ${hitEffect / 30})`;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                hitEffect--;
-            }
-            
-            if (!gameRunning && !gameWin) {
-                drawGameOver();
-            }
-            
-            if (screenShake > 0) {
-                ctx.setTransform(1, 0, 0, 1, 0, 0);
-            }
-        }
-        
-        function gameLoop(currentTime) {
-            if (!lastUpdateTime) {
-                lastUpdateTime = currentTime;
-                requestAnimationFrame(gameLoop);
-                return;
-            }
-            
-            const deltaTime = currentTime - lastUpdateTime;
-            
-            if (deltaTime >= moveInterval && gameRunning && !gameWin) {
-                movePlayer();
-                lastUpdateTime = currentTime;
-            }
-            
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-        
-        // Controles flotantes arrastrables
-        const floatingControls = document.getElementById('floatingControls');
-        let isDragging = false;
-        let dragStartX, dragStartY;
-        let controlStartX, controlStartY;
-        
-        floatingControls.addEventListener('mousedown', (e) => {
-            if (e.target.classList.contains('touch-btn')) return;
-            isDragging = true;
-            dragStartX = e.clientX;
-            dragStartY = e.clientY;
-            const rect = floatingControls.getBoundingClientRect();
-            controlStartX = rect.left;
-            controlStartY = rect.top;
-            floatingControls.style.cursor = 'grabbing';
-            e.preventDefault();
-        });
-        
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - dragStartX;
-            const dy = e.clientY - dragStartY;
-            floatingControls.style.left = `${controlStartX + dx}px`;
-            floatingControls.style.top = `${controlStartY + dy}px`;
-            floatingControls.style.right = 'auto';
-            floatingControls.style.bottom = 'auto';
-        });
-        
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-            floatingControls.style.cursor = 'grab';
-        });
-        
-        // Touch events para móvil
-        floatingControls.addEventListener('touchstart', (e) => {
-            if (e.target.classList.contains('touch-btn')) return;
-            isDragging = true;
-            const touch = e.touches[0];
-            dragStartX = touch.clientX;
-            dragStartY = touch.clientY;
-            const rect = floatingControls.getBoundingClientRect();
-            controlStartX = rect.left;
-            controlStartY = rect.top;
-            e.preventDefault();
-        });
-        
-        window.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            const touch = e.touches[0];
-            const dx = touch.clientX - dragStartX;
-            const dy = touch.clientY - dragStartY;
-            floatingControls.style.left = `${controlStartX + dx}px`;
-            floatingControls.style.top = `${controlStartY + dy}px`;
-            floatingControls.style.right = 'auto';
-            floatingControls.style.bottom = 'auto';
-        });
-        
-        window.addEventListener('touchend', () => {
-            isDragging = false;
-        });
-        
-        // Prevenir scroll con flechas
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                e.preventDefault();
-            }
-        });
-        
-        // Controles de teclado
-        document.addEventListener('keydown', (e) => {
-            if (!gameRunning || gameWin) return;
-            
-            switch(e.key) {
-                case 'ArrowUp': if (direction.y === 0) direction = { x: 0, y: -1 }; break;
-                case 'ArrowDown': if (direction.y === 0) direction = { x: 0, y: 1 }; break;
-                case 'ArrowLeft': if (direction.x === 0) direction = { x: -1, y: 0 }; break;
-                case 'ArrowRight': if (direction.x === 0) direction = { x: 1, y: 0 }; break;
-            }
-        });
-        
-        // Controles táctiles
-        const touchButtons = document.querySelectorAll('.touch-btn');
-        touchButtons.forEach(btn => {
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const dir = btn.getAttribute('data-dir');
-                if (!gameRunning || gameWin) return;
-                
-                switch(dir) {
-                    case 'up': if (direction.y === 0) direction = { x: 0, y: -1 }; break;
-                    case 'down': if (direction.y === 0) direction = { x: 0, y: 1 }; break;
-                    case 'left': if (direction.x === 0) direction = { x: -1, y: 0 }; break;
-                    case 'right': if (direction.x === 0) direction = { x: 1, y: 0 }; break;
-                }
-            });
-            
-            btn.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const dir = btn.getAttribute('data-dir');
-                if (!gameRunning || gameWin) return;
-                
-                switch(dir) {
-                    case 'up': if (direction.y === 0) direction = { x: 0, y: -1 }; break;
-                    case 'down': if (direction.y === 0) direction = { x: 0, y: 1 }; break;
-                    case 'left': if (direction.x === 0) direction = { x: -1, y: 0 }; break;
-                    case 'right': if (direction.x === 0) direction = { x: 1, y: 0 }; break;
-                }
-            });
-        });
-        
-        document.getElementById('restartBtn').addEventListener('click', () => {
-            initGame();
-            gameRunning = true;
-            gameWin = false;
-            lastUpdateTime = 0;
-            direction = { x: 0, y: 0 };
-            particles = [];
-        });
-        
-        initGame();
-        gameLoop();
-    </script>
+        if (policeCounter >= 25) { police = null; policeCounter = 0; }
+    }
+
+    particles = particles.filter(p => p.update());
+
+    if (progress >= 100) showVictory();
+}
+
+function triggerGameOver() {
+    gameRunning = false;
+    hitEffect = 40;
+    screenShake = 15;
+}
+
+// ── HUD ───────────────────────────────────────────────
+function updateHUD() {
+    document.getElementById('score').textContent = Math.floor(score);
+    document.getElementById('foodCount').textContent = foodCount;
+    document.getElementById('dollarCount').textContent = dollarCount;
+    document.getElementById('progress').textContent = `${Math.min(progress, 100).toFixed(1)}%`;
+    document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
+
+    const ic = document.getElementById('impunityCard');
+    const it = document.getElementById('impunityTimer');
+    if (impunityRemaining > 0) {
+        it.textContent = Math.ceil(impunityRemaining / 10);
+        ic.classList.add('active-shield');
+    } else {
+        it.textContent = '—';
+        ic.classList.remove('active-shield');
+    }
+}
+
+// ── Drawing helpers ───────────────────────────────────
+
+// Draw checkerboard-ish game bg
+function drawBg() {
+    ctx.fillStyle = '#080d1a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // subtle grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= CX; i++) {
+        ctx.beginPath(); ctx.moveTo(i * GS, 0); ctx.lineTo(i * GS, canvas.height); ctx.stroke();
+    }
+    for (let j = 0; j <= CY; j++) {
+        ctx.beginPath(); ctx.moveTo(0, j * GS); ctx.lineTo(canvas.width, j * GS); ctx.stroke();
+    }
+}
+
+// Percent pill
+function drawPercent(x, y) {
+    const cx = x * GS + GS / 2, cy = y * GS + GS / 2, r = GS / 2 - 4;
+    ctx.save();
+    const g = ctx.createRadialGradient(cx - 3, cy - 3, 1, cx, cy, r);
+    g.addColorStop(0, '#4ade80'); g.addColorStop(1, '#16a34a');
+    ctx.fillStyle = g;
+    ctx.shadowColor = '#22c55e'; ctx.shadowBlur = 12;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'white';
+    ctx.font = `bold ${Math.floor(GS * 0.38)}px 'Bebas Neue', sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('3%', cx, cy);
+    ctx.restore();
+}
+
+// Dollar bill
+function drawDollar(x, y) {
+    const bx = x * GS + 3, by = y * GS + 7, bw = GS - 6, bh = GS - 14;
+    ctx.save();
+    const g = ctx.createLinearGradient(bx, by, bx + bw, by + bh);
+    g.addColorStop(0, '#78350f'); g.addColorStop(0.3, '#f5c518'); g.addColorStop(1, '#ca8a04');
+    ctx.fillStyle = g;
+    ctx.shadowColor = '#f5c518'; ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.roundRect(bx, by, bw, bh, 3);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = '#0a0f2e';
+    ctx.font = `bold ${Math.floor(GS * 0.3)}px 'Bebas Neue', sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('U$S', bx + bw / 2, by + bh / 2);
+    ctx.restore();
+}
+
+// Shield
+function drawImpunity(x, y) {
+    const cx = x * GS + GS / 2, cy = y * GS + GS / 2, r = GS / 2 - 3;
+    const t = Date.now() / 600;
+    ctx.save();
+    const g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+    g.addColorStop(0, '#ef4444'); g.addColorStop(1, '#dc2626');
+    ctx.fillStyle = g;
+    ctx.shadowColor = '#ef4444'; ctx.shadowBlur = 14 + 6 * Math.sin(t);
+    // shield shape
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - r);
+    ctx.bezierCurveTo(cx + r, cy - r, cx + r, cy + r * 0.4, cx, cy + r);
+    ctx.bezierCurveTo(cx - r, cy + r * 0.4, cx - r, cy - r, cx, cy - r);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'white';
+    ctx.font = `bold ${Math.floor(GS * 0.35)}px 'Barlow Condensed', sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('IMP', cx, cy);
+    ctx.restore();
+}
+
+// Player — politician with tie, blonde hair, suit
+function drawPlayer(px, py) {
+    const x = px * GS, y = py * GS, s = GS;
+    ctx.save();
+
+    // impunity glow ring
+    if (impunityRemaining > 0) {
+        const t = Date.now() / 300;
+        ctx.beginPath();
+        ctx.arc(x + s / 2, y + s / 2, s / 1.4, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${(t * 40) % 360},100%,60%,0.7)`;
+        ctx.lineWidth = 3;
+        ctx.shadowColor = 'white'; ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+    }
+
+    // Body / suit (navy)
+    ctx.fillStyle = '#1e3a6e';
+    ctx.beginPath(); ctx.roundRect(x + 4, y + s * 0.55, s - 8, s * 0.5, [2, 2, 6, 6]); ctx.fill();
+
+    // Tie (red)
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath();
+    ctx.moveTo(x + s / 2 - 2, y + s * 0.55);
+    ctx.lineTo(x + s / 2 + 2, y + s * 0.55);
+    ctx.lineTo(x + s / 2 + 3, y + s * 0.8);
+    ctx.lineTo(x + s / 2, y + s * 0.85);
+    ctx.lineTo(x + s / 2 - 3, y + s * 0.8);
+    ctx.closePath(); ctx.fill();
+
+    // Face
+    const fg = ctx.createRadialGradient(x + s * 0.42, y + s * 0.28, 2, x + s / 2, y + s * 0.35, s * 0.28);
+    fg.addColorStop(0, '#ffe4c4'); fg.addColorStop(1, '#f0c89c');
+    ctx.fillStyle = fg;
+    ctx.beginPath(); ctx.ellipse(x + s / 2, y + s * 0.35, s * 0.27, s * 0.28, 0, 0, Math.PI * 2); ctx.fill();
+
+    // Hair (golden/blonde) — swept back
+    ctx.fillStyle = '#d4a017';
+    ctx.beginPath();
+    ctx.ellipse(x + s / 2, y + s * 0.17, s * 0.3, s * 0.18, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    // front tuft
+    ctx.beginPath();
+    ctx.ellipse(x + s * 0.38, y + s * 0.12, s * 0.18, s * 0.1, 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eyes
+    ctx.fillStyle = '#1e293b';
+    ctx.beginPath(); ctx.ellipse(x + s * 0.41, y + s * 0.33, 2.5, 2, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x + s * 0.59, y + s * 0.33, 2.5, 2, 0, 0, Math.PI * 2); ctx.fill();
+    // eye shine
+    ctx.fillStyle = 'white';
+    ctx.beginPath(); ctx.arc(x + s * 0.42, y + s * 0.32, 1, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x + s * 0.60, y + s * 0.32, 1, 0, Math.PI * 2); ctx.fill();
+
+    // Smile (smug)
+    ctx.beginPath();
+    ctx.arc(x + s / 2, y + s * 0.42, s * 0.1, 0.2, Math.PI - 0.2);
+    ctx.strokeStyle = '#8b5c2a'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    ctx.restore();
+}
+
+// La Ley — police officer, dark uniform, cap, badge
+function drawLey(px, py) {
+    const x = px * GS, y = py * GS, s = GS;
+    ctx.save();
+    ctx.shadowColor = '#3b82f6'; ctx.shadowBlur = 12;
+
+    // Body — dark blue uniform
+    ctx.fillStyle = '#1e3050';
+    ctx.beginPath(); ctx.roundRect(x + 4, y + s * 0.55, s - 8, s * 0.5, [2, 2, 6, 6]); ctx.fill();
+
+    // Badge
+    ctx.fillStyle = '#f5c518';
+    ctx.beginPath(); ctx.arc(x + s * 0.38, y + s * 0.66, 3, 0, Math.PI * 2); ctx.fill();
+
+    // Face
+    ctx.fillStyle = '#f0c89c';
+    ctx.beginPath(); ctx.ellipse(x + s / 2, y + s * 0.38, s * 0.25, s * 0.26, 0, 0, Math.PI * 2); ctx.fill();
+
+    // Cap (dark blue with brim)
+    ctx.fillStyle = '#0f1f40';
+    ctx.beginPath(); ctx.ellipse(x + s / 2, y + s * 0.18, s * 0.3, s * 0.13, 0, 0, Math.PI * 2); ctx.fill();
+    // brim
+    ctx.fillStyle = '#0a1530';
+    ctx.beginPath(); ctx.ellipse(x + s / 2, y + s * 0.23, s * 0.35, s * 0.07, 0, 0, Math.PI); ctx.fill();
+    // cap top stripe
+    ctx.fillStyle = '#f5c518';
+    ctx.fillRect(x + s * 0.22, y + s * 0.16, s * 0.56, 2);
+
+    // Eyes — stern
+    ctx.fillStyle = '#1e293b';
+    ctx.beginPath(); ctx.ellipse(x + s * 0.41, y + s * 0.36, 2.5, 2, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x + s * 0.59, y + s * 0.36, 2.5, 2, 0, 0, Math.PI * 2); ctx.fill();
+    // brows
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x + s * 0.37, y + s * 0.30); ctx.lineTo(x + s * 0.46, y + s * 0.31); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x + s * 0.54, y + s * 0.31); ctx.lineTo(x + s * 0.63, y + s * 0.30); ctx.stroke();
+
+    // Stern mouth
+    ctx.beginPath();
+    ctx.moveTo(x + s * 0.42, y + s * 0.46);
+    ctx.lineTo(x + s * 0.58, y + s * 0.46);
+    ctx.strokeStyle = '#7a4f2a'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // "LA LEY" label under cap
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'white';
+    ctx.font = `bold ${Math.floor(s * 0.18)}px 'Bebas Neue', sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('LA LEY', x + s / 2, y + s * 0.91);
+
+    ctx.restore();
+}
+
+// ── Main draw ─────────────────────────────────────────
+function draw() {
+    ctx.save();
+    if (screenShake > 0) {
+        ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake);
+        screenShake = Math.max(0, screenShake - 1);
+    }
+
+    drawBg();
+    items.forEach(it => {
+        if (it.type === 'percent') drawPercent(it.x, it.y);
+        else if (it.type === 'dollar') drawDollar(it.x, it.y);
+        else drawImpunity(it.x, it.y);
+    });
+    if (police) drawLey(police.x, police.y);
+    drawPlayer(player.x, player.y);
+    particles.forEach(p => p.draw());
+
+    if (hitEffect > 0) {
+        ctx.fillStyle = `rgba(224,48,48,${hitEffect / 40 * 0.55})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        hitEffect--;
+    }
+
+    if (!gameRunning && !gameWin) drawGameOverScreen();
+    ctx.restore();
+}
+
+function drawGameOverScreen() {
+    ctx.fillStyle = 'rgba(0,0,0,0.82)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#e03030'; ctx.shadowBlur = 30;
+    ctx.fillStyle = '#e03030';
+    ctx.font = `bold 62px 'Bebas Neue', sans-serif`;
+    ctx.letterSpacing = '4px';
+    ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 40);
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = '#f5c518';
+    ctx.font = `bold 24px 'Bebas Neue', sans-serif`;
+    ctx.fillText(`Puntaje: ${Math.floor(score)}   ·   Progreso: ${progress.toFixed(1)}%`, canvas.width / 2, canvas.height / 2 + 20);
+
+    ctx.fillStyle = '#7d8590';
+    ctx.font = `500 16px 'Barlow Condensed', sans-serif`;
+    ctx.fillText('Presioná RESTART para intentar de nuevo', canvas.width / 2, canvas.height / 2 + 65);
+    ctx.restore();
+}
+
+function showVictory() {
+    gameRunning = false;
+    gameWin = true;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-title">¡MISIÓN CUMPLIDA!</div>
+            <div class="modal-subtitle">Conseguiste asilo en Medio Oriente 🕌</div>
+            <div class="modal-stat"><span>Puntaje final</span><span>${Math.floor(score)}</span></div>
+            <div class="modal-stat"><span>3% recolectados</span><span>${foodCount}</span></div>
+            <div class="modal-stat"><span>Dólares alzados</span><span>${dollarCount}</span></div>
+            <button class="modal-btn" id="victoryRestart">JUGAR DE NUEVO</button>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    document.getElementById('victoryRestart').addEventListener('click', () => {
+        overlay.remove();
+        startFresh();
+    });
+}
+
+function startFresh() {
+    initGame();
+    gameRunning = true;
+    gameWin = false;
+    lastTime = 0;
+    dir = { x: 0, y: 0 };
+    particles = [];
+}
+
+// ── Game loop ─────────────────────────────────────────
+function gameLoop(now) {
+    if (!lastTime) lastTime = now;
+    const dt = now - lastTime;
+    if (dt >= MOVE_INTERVAL && gameRunning && !gameWin) {
+        movePlayer();
+        updateHUD();
+        lastTime = now;
+    }
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+// ── Controls ──────────────────────────────────────────
+document.addEventListener('keydown', e => {
+    if (!gameRunning || gameWin) return;
+    const m = { ArrowUp: [0,-1], ArrowDown: [0,1], ArrowLeft: [-1,0], ArrowRight: [1,0] };
+    if (m[e.key]) {
+        const [dx, dy] = m[e.key];
+        if (dx === 0 || dir.y === 0) dir = { x: dx, y: dy };
+        e.preventDefault();
+    }
+});
+
+window.addEventListener('keydown', e => {
+    if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
+});
+
+function setDir(d) {
+    if (!gameRunning || gameWin) return;
+    const m = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
+    if (m[d]) dir = { x: m[d][0], y: m[d][1] };
+}
+
+document.querySelectorAll('.dpad-btn').forEach(btn => {
+    const d = btn.dataset.dir;
+    btn.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); setDir(d); });
+    btn.addEventListener('mousedown', e => { e.preventDefault(); setDir(d); });
+});
+
+document.getElementById('restartBtn').addEventListener('click', startFresh);
+
+// ── Draggable d-pad ───────────────────────────────────
+const fc = document.getElementById('floatingControls');
+let drag = false, dsx, dsy, csx, csy;
+
+fc.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('dpad-btn') || e.target.classList.contains('dpad-center')) return;
+    drag = true; dsx = e.clientX; dsy = e.clientY;
+    const r = fc.getBoundingClientRect(); csx = r.left; csy = r.top;
+    e.preventDefault();
+});
+window.addEventListener('mousemove', e => {
+    if (!drag) return;
+    fc.style.left = `${csx + e.clientX - dsx}px`; fc.style.top = `${csy + e.clientY - dsy}px`;
+    fc.style.right = 'auto'; fc.style.bottom = 'auto';
+});
+window.addEventListener('mouseup', () => drag = false);
+
+fc.addEventListener('touchstart', e => {
+    if (e.target.classList.contains('dpad-btn') || e.target.classList.contains('dpad-center')) return;
+    drag = true; const t = e.touches[0]; dsx = t.clientX; dsy = t.clientY;
+    const r = fc.getBoundingClientRect(); csx = r.left; csy = r.top;
+    e.preventDefault();
+}, { passive: false });
+window.addEventListener('touchmove', e => {
+    if (!drag) return;
+    const t = e.touches[0];
+    fc.style.left = `${csx + t.clientX - dsx}px`; fc.style.top = `${csy + t.clientY - dsy}px`;
+    fc.style.right = 'auto'; fc.style.bottom = 'auto';
+}, { passive: false });
+window.addEventListener('touchend', () => drag = false);
+
+// ── Swipe on canvas ───────────────────────────────────
+let touchStartX, touchStartY;
+canvas.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+canvas.addEventListener('touchend', e => {
+    if (!touchStartX) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+    if (Math.abs(dx) > Math.abs(dy)) {
+        setDir(dx > 0 ? 'right' : 'left');
+    } else {
+        setDir(dy > 0 ? 'down' : 'up');
+    }
+});
+
+// ── Start ─────────────────────────────────────────────
+initGame();
+requestAnimationFrame(gameLoop);
+</script>
 </body>
 </html>
